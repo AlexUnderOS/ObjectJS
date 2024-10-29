@@ -19,14 +19,72 @@ header {
     margin: 0 auto;
     background: var(--bg-color-darker);
     width: 35rem;
-    height: 20rem;
+    height: 50rem;
     border-radius: 20px;
     display: flex;
 }
 
-.game .content {
-    background-color: var(--text-color-1);
+.game #gameArea {
+    position: relative;
+    background: var(--text-color-1);
     width: 100%;
     margin: 20px;
     padding: 20px;
+}
+
+.coin {
+    width: 15px;
+    height: 15px;
+    background-color: gold;
+    position: absolute;
+    border-radius: 50%;
+}
+
+#player img {
+    width: 190px;
+    height: auto;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    animation-name: walking;
+    animation-duration: .5s;
+    animation-iteration-count: infinite;
+}
+
+#player {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+.enemies {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.enemy {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#timer {
+    font-size: 1.5rem; /* Установите желаемый размер шрифта */
+    margin-top: 10px; /* Отступ сверху */
+    color: var(--text-color-1); /* Используйте ваш цвет текста */
+    text-align: center; /* Центрирование текста */
+}
+
+@keyframes walking {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
 }
