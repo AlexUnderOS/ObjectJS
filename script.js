@@ -1,42 +1,72 @@
-const player = document.getElementById('player')
-const gameArea = document.getElementById('gameArea')
-const enemiesContainer = document.querySelector('.enemies')
-const timerElement = document.getElementById('timer')
-const maxScoreElement = document.getElementById('maxScore')
+const player = {
+  element: document.getElementById('player'),
+  position: 10,
+  direction: 1,
+  isMoving: true,
+  width: document.getElementById('player').offsetWidth,
+  move() {
+    if (this.isMoving) {
+      this.position += this.direction * 2
 
-let position = 10
-let direction = 1
-let isMoving = true
-
-const playerWidth = player.offsetWidth
-const gameAreaWidth = gameArea.clientWidth - 210
-
-function movePlayer() {
-  if (isMoving) {
-    position += direction * 2
-
-    if (position + playerWidth > gameAreaWidth) {
-      position = gameAreaWidth - playerWidth
-      direction = -1
-    } else if (position < 0) {
-      position = 0
-      direction = 1
+      if (this.position + this.width > gameArea.width) {
+        this.position = gameArea.width - this.width
+        this.direction = -1
+      } else if (this.position < 0) {
+        this.position = 0
+        this.direction = 1
+      }
+      this.element.style.left = this.position + 'px'
     }
-    player.style.left = position + 'px'
-  }
+  },
+  toggleMovement(isMoving) {
+    this.isMoving = isMoving
+  },
 }
 
-setInterval(movePlayer, 10)
+const gameArea = {
+  element: document.getElementById('gameArea'),
+  width: document.getElementById('gameArea').clientWidth,
+  enemiesContainer: document.querySelector('.enemies'),
+}
 
-gameArea.addEventListener('mousedown', () => {
-  isMoving = false
-})
+const game = {
+  timerElement: document.getElementById('timer'),
+  maxScoreElement: document.getElementById('maxScore'),
+  timerValue: 0,
+  maxScore: localStorage.getItem('max-score') || 0,
 
-gameArea.addEventListener('mouseup', () => {
-  isMoving = true
-})
+  startTimer() {
+    setInterval(() => {
+      this.timerValue++
+      this.timerElement.textContent = `Laiks: ${this.timerValue}`
+    }, 1000)
+  },
 
-// ...
+  updateMaxScore() {
+    if (this.timerValue > this.maxScore) {
+      this.maxScore = this.timerValue
+      localStorage.setItem('max-score', this.maxScore)
+    }
+    this.maxScoreElement.textContent = `Max-rezultāts: ${this.maxScore}`
+  },
+
+  resetGame() {
+    this.updateMaxScore()
+    this.timerValue = 0
+  },
+}
+
+// PC
+gameArea.element.addEventListener('mousedown', () =>
+  player.toggleMovement(false)
+)
+gameArea.element.addEventListener('mouseup', () => player.toggleMovement(true))
+
+// Mobile
+gameArea.element.addEventListener('touchstart', () =>
+  player.toggleMovement(false)
+)
+gameArea.element.addEventListener('touchend', () => player.toggleMovement(true))
 
 function spawnEnemy() {
   const enemy = document.createElement('div')
@@ -45,21 +75,20 @@ function spawnEnemy() {
   const enemyImage = document.createElement('img')
   enemyImage.src = 'images/documents.png'
   enemyImage.style.width = '70px'
-  enemyImage.style.height = 'auto'
-
   enemy.appendChild(enemyImage)
-  enemy.style.left = Math.random() * (gameAreaWidth - 30) + 'px'
-  enemiesContainer.appendChild(enemy)
+
+  enemy.style.left = Math.random() * (gameArea.width - 100) + 'px'
+  gameArea.enemiesContainer.appendChild(enemy)
 
   let enemyPosition = 0
 
   function moveEnemy() {
     enemyPosition += 1
 
-    if (enemyPosition < gameArea.clientHeight - 240) {
+    if (enemyPosition < gameArea.element.clientHeight - 240) {
       enemy.style.top = enemyPosition + 'px'
 
-      const playerRect = player.getBoundingClientRect()
+      const playerRect = player.element.getBoundingClientRect()
       const enemyRect = enemy.getBoundingClientRect()
 
       if (
@@ -68,9 +97,8 @@ function spawnEnemy() {
         playerRect.top < enemyRect.top + enemyRect.height &&
         playerRect.height + playerRect.top > enemyRect.top
       ) {
-        console.log('Game Over!')
         enemy.remove()
-        looseAndReset()
+        game.resetGame()
         return
       }
 
@@ -83,25 +111,18 @@ function spawnEnemy() {
   moveEnemy()
 }
 
-setInterval(spawnEnemy, 3000)
+const checkBox1 = document.getElementById('checkBox1')
+const playerCollider = document.getElementById('playerCollider')
 
-// timer
-
-let timerValue = 0
-
-setInterval(() => {
-  timerValue++
-  timerElement.textContent = `Laiks: ${timerValue}`
-}, 1000)
-
-// loose
-
-let maxScore = 0
-
-const looseAndReset = () => {
-  if (timerValue > maxScore) {
-    maxScore = timerValue
+checkBox1.addEventListener('change', function () {
+  if (checkBox1.checked) {
+    playerCollider.style.border = '3px solid #ff000049'
+  } else {
+    playerCollider.style.border = 'none'
   }
-  timerValue = 0
-  maxScoreElement.textContent = `Max-rezultāts: ${maxScore}`
-}
+})
+
+setInterval(() => player.move(), 10)
+setInterval(spawnEnemy, 3000)
+game.startTimer()
+game.maxScoreElement.textContent = `Max-rezultāts: ${game.maxScore}`

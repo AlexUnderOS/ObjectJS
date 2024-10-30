@@ -8,11 +8,19 @@ body {
     font-family: Arial;
     background: var(--bg-color);
     color: var(--text-color-1);
+    user-select: none;
+    margin: 0;
+    padding: 0;
 }
 
 header {
     text-align: center;
     margin-bottom: 50px;
+}
+
+.lore {
+    text-align: center;
+    background-color: #1f1d1c;
 }
 
 .game {
@@ -24,7 +32,7 @@ header {
     display: flex;
 }
 
-.game #gameArea {
+#gameArea {
     position: relative;
     background: var(--text-color-1);
     width: 100%;
@@ -45,7 +53,7 @@ header {
     height: auto;
     position: absolute;
     bottom: 10px;
-    left: 10px;
+    left: -25px;
     animation-name: walking;
     animation-duration: .5s;
     animation-iteration-count: infinite;
@@ -54,7 +62,6 @@ header {
 #player {
     position: absolute;
     bottom: 10px;
-    left: 10px;
 }
 
 .enemies {
@@ -71,10 +78,17 @@ header {
 }
 
 #timer {
-    font-size: 1.5rem; /* Установите желаемый размер шрифта */
-    margin-top: 10px; /* Отступ сверху */
-    color: var(--text-color-1); /* Используйте ваш цвет текста */
-    text-align: center; /* Центрирование текста */
+    font-size: 1.5rem; 
+    margin-top: 10px;
+    color: var(--text-color-1);
+    text-align: center;
+}
+
+#playerCollider {
+    border: 3px solid #ff000049;
+    width: 140px;
+    height: 210px;
+    border-radius: 10px;
 }
 
 @keyframes walking {

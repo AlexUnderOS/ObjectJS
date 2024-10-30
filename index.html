@@ -10,16 +10,27 @@
     <header>
       <h1>Object JS</h1>
       <q>3PT - Aleksandrs Ostapjuks, Maksims Bizjuks</q>
-      <p>Max-rezultāts: </p>
-      <p id="timer">Timer: </p>
+      <p id="maxScore">Max-rezultāts:</p>
+      <p id="timer">Laiks:</p>
+      <label for="checkBox1">
+        <input id="checkBox1" type="checkbox" checked>
+        Ieslēgt 'boxcollider'
+      </label>
     </header>
-    <div class="game">
-      <div id="gameArea">
-        <div class="enemies">
+    <main>
+      <div class="game">
+        <div id="gameArea">
+          <div class="enemies"></div>
+          <div id="player">
+            <img src="images/biznesman.png" alt="" draggable="false"/>
+            <div id="playerCollider"></div>
+          </div>
         </div>
-        <div id="player"><img id="player" src="images/biznesman.png" alt=""></div>
       </div>
-    </div>
+      <div class="lore">
+        <p>Biznesmens Vasja, draud ar virsstundu darbu no sava bosa, neļaujiet Vasjai zaudēt savu laiku, izvairīties no virsstundām makulotūras!</p>
+      </div>
+    </main>
     <script src="script.js"></script>
   </body>
 </html>
